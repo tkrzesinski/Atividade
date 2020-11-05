@@ -44,14 +44,16 @@ A estrutura do diretorio:
                   background.py     - executa a limpeza 
                   
 Funcionalidade:
-a API carrega um arquivo selecionado codificado em base64, executa a limpeza , retorna o arquivo limpo e grava a imagem em base64 no banco .
+Para a execução criar um diretorio local : Projeto
+
+A API carrega um arquivo selecionado codificado em base64, executa a limpeza , retorna o arquivo limpo e grava a imagem em base64 no banco .
 Para executar esta API com arquivos codificados em base64, os arquivos originais foram codificados e estão na pasta /Projeto/dataset/ruido_base64
 A imagem que esta em /
 
 a pasta Projeto/dataset/ruido_base64, os arquivos a serem enviados deverão ser codificados em base64. Para esta solução foi criada a pasta ruido_base64.
 Os arquivos para upload estao na pasta Projeto/
 Para e execução foram incluidos 3 metodos:
-        http://127.0.0.1:5000/upload/  metodo POST   - upload 
+         metodo POST   - upload 
                               
                   
     
