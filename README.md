@@ -44,7 +44,9 @@ A estrutura do diretorio:
                   background.py     - executa a limpeza 
                   
 Funcionalidade:
-Para a execução criar um diretorio local : Projeto
+Para a execução criar um diretorio local : Projeto e clonar
+
+O arquivo requirements.txt contem todas as bibliotecas que deverão ser instaladas
 
 A API carrega um arquivo selecionado codificado em base64, executa a limpeza , retorna o arquivo limpo e grava a imagem em base64 no banco .
 Para executar esta API com arquivos codificados em base64, os arquivos originais foram codificados e estão na pasta /Projeto/dataset/ruido_base64
@@ -53,7 +55,9 @@ A imagem que esta em /
 a pasta Projeto/dataset/ruido_base64, os arquivos a serem enviados deverão ser codificados em base64. Para esta solução foi criada a pasta ruido_base64.
 Os arquivos para upload estao na pasta Projeto/
 Para e execução foram incluidos 3 metodos:
-         metodo POST   - upload 
-                              
+        /upload/    - metodo POST para upload dos arquivos em base64. Na pasta /dataset/ruido_base64 as imagens da pasta original train foram codificadas em                                base64 . Na pasta /imagens/Tela upload.png tem uma imagem do postman com o metodo
+        /lista/      - metodo GET lista todos os arquivos que ja foram convertidos e se encontram no banco conforme /imagens/Tela lista.png
+        /consulta/<string:nome>  - metodo POST, onde e o o nome da imagem gravada no banco sem a extensão ex: Imagem limpa    2.pgn informar apenas 2. A API                                            retornara a imagem limpa   
+        
+No banco será gravado apenas nome da imagem sem extensão e a imagem em base64, ha uma FALHA , a API nao esta tratando a mensagem de erro quando quando o mesmo arquivo é convertido mais de uma vez, devido a chave nome ser unica. O sistema deve tratar o erro. Não ha mais outros campos, pois a imagem em base64 é maior do que a propria imagen em png, devido ao encode64 e o SQLite é limitado. Uma solução para o tamanho da imagem seria gravar o caminho da mesma , limpa e em base64, porem, para teste da funcionalidade e nao está em produção , foi optado por gravar a imagem.
                   
-    
