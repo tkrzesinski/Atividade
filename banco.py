@@ -21,7 +21,7 @@ class Arquivos(Base):
         return '<Imagem {}>'.format(self.nome)
 
     def save(self):
-        db_session.add(self)
+        db_session.merge(self)
         db_session.commit()
 
     def delete(self):
