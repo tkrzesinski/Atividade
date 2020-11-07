@@ -16,15 +16,22 @@ Para desenvolver esta solução foram executados os seguintes passos:
     
 2. Analise das frameworks necessarias:
     Para o desenvolvimento foi utilizada a linguagem Python.
+    
     Para a API foi utilizada a biblioteca Flask e Flask_restfull
+    
     Para o Banco de Dados foi utilizado o SQLite - devido a sua simplicidade e portabilidade
+    
     Para acesso ao banco de dados foi utilizado o SQLAlchemy - todo o acesso ao banco sem necessidade de conhecimento de instruções SQL
     
 3. Analise do metodo a ser utilizado para a limpeza das imagens
   Como foi um desafio lançado pelo Kaggle,vários metodos foram apresentados desde então. Desde metodos simples até os que utilizam e exigem muitos recursos de         maquina. Após analise e teste de alguns metodos, pude concluir o seguinte:
+  
     3.1 Desde o desafio, até a presente data, novos modelos vem surgindo e aprimorando os resultados (Não poderia ser diferente)
+    
     3.2 Metodos como filtro de Mediana, Autoencoder, detecção das bordas e regressão linear, cada um tem uma melhor atuação em determinado tipo de mancha. Havendo         a utilização de mais de um metodo para melhoria no resultado.
+    
     3.3 Ha bibliografia que pretende estudar os efeitos da combinação de técnicas de processamento de imagens e redes neurais. Técnicas de processamento de imagem         como limiarização, filtragem, detecção de bordas, operações morfológicas, etc. são aplicadas a imagens de pré-processamento para render maior precisão             de modelos de rede neural.
+    
     3.4 Então, por entender que, para esta solução seria melhor um metodo com necessidade de pouco recurso e que melhor executasse a função dentro de suas                 limitações, foi selecionado o metodo de Background. Subtraimos o fundo da imagem e retiramos o primeiro plano .
     
 
@@ -48,16 +55,18 @@ Para a execução criar um diretorio local : Projeto e clonar
 
 O arquivo requirements.txt contem todas as bibliotecas que deverão ser instaladas
 
-A API carrega um arquivo selecionado codificado em base64, executa a limpeza , retorna o arquivo limpo e grava a imagem em base64 no banco .
-Para executar esta API com arquivos codificados em base64, os arquivos originais foram codificados e estão na pasta /Projeto/dataset/ruido_base64
-A imagem que esta em /
+Para testar a API as imagens originais foram codificadas para base64 ,para realizar o upload e estão na pasta "Projeto/dataset/ruido_base64/" com a extensão .txt
 
-a pasta Projeto/dataset/ruido_base64, os arquivos a serem enviados deverão ser codificados em base64. Para esta solução foi criada a pasta ruido_base64.
-Os arquivos para upload estao na pasta Projeto/
+A API carrega uma imagem selecionada codificada em base64, executa a limpeza , retorna a imagem limpa e grava a imagem codificada em base64 no banco SQLite e na pasta "Projeto/dataset/limpa_base64/" com o mesmo nome da imagem original e extensão .txt.
+
 Para e execução foram incluidos 3 metodos:
-        /upload/    - metodo POST para upload dos arquivos em base64. Na pasta /dataset/ruido_base64 as imagens da pasta original train foram codificadas em                                base64 . Na pasta /imagens/Tela upload.png tem uma imagem do postman com o metodo
-        /lista/      - metodo GET lista todos os arquivos que ja foram convertidos e se encontram no banco conforme /imagens/Tela lista.png
-        /consulta/<string:nome>  - metodo POST, onde e o o nome da imagem gravada no banco sem a extensão ex: Imagem limpa    2.pgn informar apenas 2. A API                                            retornara a imagem limpa   
+        /upload/    - metodo POST para upload dos arquivos em base64. Na pasta "Projeto/dataset/ruido_base64" as imagens da pasta original train foram codificadas                       em base64 . Na pasta "Projeto/imagens/Tela upload.png" tem uma imagem do postman com a execução do metodo
+        /lista/      - metodo GET lista todos os arquivos que ja foram convertidos e se encontram no banco conforme "Projeto/imagens/Tela lista.png"
+        /consulta/<string:nome>  - metodo POST, este metodo traz a imagem gravada no banco, deve ser informada sem a extensão ex: Imagem limpa    2.pgn informar                                        apenas "2".   
         
-No banco será gravado apenas nome da imagem sem extensão, o caminho  e a imagem em base64. Não ha mais outros campos, pois a imagem em base64 é maior do que a propria imagen em png(em torno de 30% maior), devido ao encode64,  e o SQLite tambem é limitadoem recursos. Uma solução para o tamanho da imagem seria gravar o caminho da mesma , limpa e em base64, porem, para teste da funcionalidade e nao está em produção , foi optado por gravar a imagem.
+No banco será gravado apenas nome da imagem sem extensão, o caminho  e a imagem em base64. Não ha mais outros campos, pois a imagem em base64 é maior do que a propria imagen em png(em torno de 30% maior), devido ao encode64,  e o SQLite tambem é limitado em recursos. Uma solução para o tamanho da imagem seria gravar o caminho onde a mesma foi gravada apos o processo de limpeza e codificação, porem, para teste da funcionalidade , foi optado por gravar a imagem.
+
+O método utilizado para limpeza, na verdade é Filtro de Mediana em 2D com Kernel 11,foram testados outros valores para o kernel porem, porem foi mantido o valor 11.
+
+
                   
