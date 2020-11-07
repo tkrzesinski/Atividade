@@ -64,9 +64,9 @@ Para e execução foram incluidos 3 metodos:
         /lista/      - metodo GET lista todos os arquivos que ja foram convertidos e se encontram no banco conforme "Projeto/imagens/Tela lista.png"
         /consulta/<string:nome>  - metodo POST, este metodo traz a imagem gravada no banco, deve ser informada sem a extensão ex: Imagem limpa    2.pgn informar                                        apenas "2".   
         
-No banco será gravado apenas nome da imagem sem extensão, o caminho  e a imagem em base64. Não ha mais outros campos, pois a imagem em base64 é maior do que a propria imagen em png(em torno de 30% maior), devido ao encode64,  e o SQLite tambem é limitado em recursos. Uma solução para o tamanho da imagem seria gravar o caminho onde a mesma foi gravada apos o processo de limpeza e codificação, porem, para teste da funcionalidade , foi optado por gravar a imagem.
+No banco será gravado apenas nome da imagem sem extensão, o caminho  e a imagem em base64. Não ha mais outros campos, pois a imagem em base64 é maior do que a propria imagen em png(em torno de 30% maior), devido ao encode64,  e o SQLite tambem é limitado em recursos. Uma solução para o tamanho da imagem seria gravar o caminho onde a mesma foi gravada apos o processo de limpeza e codificação.  Para testar da funcionalidade da API, optou-se por gravar a imagem no banco.
 
-O método utilizado para limpeza, na verdade é Filtro de Mediana em 2D com Kernel 11,foram testados outros valores para o kernel porem, porem foi mantido o valor 11.
+O método utilizado para limpeza, na verdade é Filtro de Mediana em 2D com Kernel 11,foram testados outros valores para o kernel, porem foi mantido o valor 11.
 
 
                   
