@@ -37,12 +37,11 @@ Para desenvolver esta solução foram executados os seguintes passos:
 
 A estrutura do diretorio:
 
-    Projeto ----- dataset --- decode64
-                              limpa_base64
-                              limpa_decode
-                              limpa_geral
-                              ruido_base64
-                              test
+    Projeto ----- dataset --- limpa_base64     (imagens limpas em base64 formato '.txt')
+                              limpa_decode     (imagens limpas em imagem formato '.png') 
+                              ruido_base64     (imagens com ruido em formato base64 '.txt' utilizadas para efetuar os testes)
+                              temp             (pasta temporaria utilizada para efetuar o processo) 
+                              test             
                               train
                               train_cleaned
                               
@@ -60,13 +59,19 @@ Para testar a API as imagens originais foram codificadas para base64 ,para reali
 A API carrega uma imagem selecionada codificada em base64, executa a limpeza , retorna a imagem limpa e grava a imagem codificada em base64 no banco SQLite e na pasta "Projeto/dataset/limpa_base64/" com o mesmo nome da imagem original e extensão .txt.
 
 Para e execução foram incluidos 3 metodos:
-        /upload/    - metodo POST para upload dos arquivos em base64. Na pasta "Projeto/dataset/ruido_base64" as imagens da pasta original train foram codificadas                       em base64 . Na pasta "Projeto/imagens/Tela upload.png" tem uma imagem do postman com a execução do metodo
-        /lista/      - metodo GET lista todos os arquivos que ja foram convertidos e se encontram no banco conforme "Projeto/imagens/Tela lista.png"
+        /upload/    - metodo POST para upload dos arquivos em base64. Na pasta "/dataset/ruido_base64" as imagens da pasta original train foram codificadas                       em base64 . Na pasta "/imagens/Tela upload.png" tem uma imagem do postman com a execução do metodo
+        /lista/      - metodo GET lista todos os arquivos que ja foram convertidos e se encontram no banco conforme "/imagens/Tela lista.png"
         /consulta/<string:nome>  - metodo POST, este metodo traz a imagem gravada no banco, deve ser informada sem a extensão ex: Imagem limpa    2.pgn informar                                        apenas "2".   
         
 No banco será gravado apenas nome da imagem sem extensão, o caminho  e a imagem em base64. Não ha mais outros campos, pois a imagem em base64 é maior do que a propria imagen em png(em torno de 30% maior), devido ao encode64,  e o SQLite tambem é limitado em recursos. Uma solução para o tamanho da imagem seria gravar o caminho onde a mesma foi gravada apos o processo de limpeza e codificação.  Para testar da funcionalidade da API, optou-se por gravar a imagem no banco.
 
 O método utilizado para limpeza, na verdade é Filtro de Mediana em 2D com Kernel 11,foram testados outros valores para o kernel, porem foi mantido o valor 11.
+
+Para efetuar os testes pode-se utilizar as imagens na pasta '/dataset/ruido_base64' que foram codificadas em base64 formato .txt
+
+As imagens limpas serão gravadas nas pastas : '/dataset/limpa_base64' em formato base64 .txt
+                                              '/dataset/limpa_decode' em formato imagem .png
+                                              
 
 
                   
