@@ -5,20 +5,22 @@ import pybase64
 from banco import Arquivos
 
 def load_image(path):
-    return np.asarray(Image.open(path)) /255.0
+    return np.asarray(Image.open(path)) /255.0  # transforma a imagem .png em array e dimensiona os valores de pixel
+                                                # na faixa de 0-1
 
 def save(path, img):
     tmp = np.asarray(img*255.0, dtype=np.uint8)
     Image.fromarray(tmp).save(path)
 
 def denoise_image(dir_temp, prefixo, inp):
-    # estimate 'background' color by a median filter
+    # estimativa da cor de fundo por um filtro mediano
+    # com kernel de 11 pixels
     bg = signal.medfilt2d(inp, 11)
     arq_bg = dir_temp + 'background_' + prefixo + '.png'
     save(arq_bg, bg)
 
-    # compute 'foreground' mask as anything that is significantly darker than
-    # the background
+    # calcula a mascara 'primeiro plano' como qualquer coisa que seja significativamente mais escura
+    # do que o plano de fundo
     mask = inp < bg - 0.1
     arq_mask = dir_temp + 'foreground_mask_' + prefixo + '.png'
     save(arq_mask, mask)
@@ -28,12 +30,12 @@ def denoise_image(dir_temp, prefixo, inp):
 
 def Limpa_background(path, prefixo):
     # Carrega imagem com ruido em base64
-    dir_temp = path + 'dataset/temp/'
-    image = path + "dataset/ruido_base64/" + prefixo + ".txt" # le imagem a ser limpa
+    dir_temp = path + 'dataset/temp/'      # diretorio temporario para trabalhar com as imagens
+    image = path + "dataset/ruido_base64/" + prefixo + ".txt" # le imagem em base64 a ser limpa,
     read_file = open(image, 'rb')
-    data = read_file.read()   # data e a imagem com ruido em base64
+    data = read_file.read()   # data e a variavel com a imagem com ruido em base64
 
-    # decodifica arquivo para imagem png
+    # decodifica arquivo para imagem png - transforma txt para png
     decode_b64 = pybase64.b64decode(data)
 
     # grava imagem decodificada no diretorio temp
@@ -41,10 +43,12 @@ def Limpa_background(path, prefixo):
     out_file = open(path_temp, 'wb')
     out_file.write(decode_b64)
 
-    image = Image.open(path_temp)
-    image.show()
+    # mostra a imagen a ser limpa
+    #image = Image.open(path_temp)
+    #image.show()
     
-    # carrega imagem salva como png
+    # carrega imagem salva como png, do diretorio temporario. Transformada em array e valores
+    # de pixel entre 0-1
     inp = load_image(path_temp)
 
     # limpa imagem
@@ -65,6 +69,10 @@ def Limpa_background(path, prefixo):
     arq_limpa_base64 = path + 'dataset/limpa_base64/' + prefixo  + '.txt'
     out_file = open(arq_limpa_base64, 'wb')
     out_file.write(encode_b64)
+
+    # mostra a imagen  limpa
+    image = Image.open(arq_limpa_decode)
+    image.show()
 
     # adiciona no banco
     arquivo = Arquivos(nome= prefixo , caminho= arq_limpa_base64, img_origem =  data, img_limpa = encode_b64)

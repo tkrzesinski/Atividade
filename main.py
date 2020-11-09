@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 
 dir_path = os.path.dirname(os.path.realpath(__file__)) + '/'
 
-app = Flask(__name__, static_folder="uploads")
+app = Flask(__name__)
 
 api = Api(app)
 UPLOAD_FOLDER = dir_path + 'dataset/ruido_base64/'
