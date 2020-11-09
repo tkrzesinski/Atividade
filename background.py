@@ -5,67 +5,67 @@ import pybase64
 from banco import Arquivos
 
 def load_image(path):
-    return np.asarray(Image.open(path))/255.0
+    return np.asarray(Image.open(path)) /255.0
 
 def save(path, img):
     tmp = np.asarray(img*255.0, dtype=np.uint8)
     Image.fromarray(tmp).save(path)
 
-def denoise_image(inp):
+def denoise_image(dir_temp, prefixo, inp):
     # estimate 'background' color by a median filter
     bg = signal.medfilt2d(inp, 11)
-    save('background.png', bg)
+    arq_bg = dir_temp + 'background_' + prefixo + '.png'
+    save(arq_bg, bg)
 
     # compute 'foreground' mask as anything that is significantly darker than
     # the background
     mask = inp < bg - 0.1
-    save('foreground_mask.png', mask)
+    arq_mask = dir_temp + 'foreground_mask_' + prefixo + '.png'
+    save(arq_mask, mask)
 
     # return the input value for all pixels in the mask or pure white otherwise
     return np.where(mask, inp, 1.0)
 
 def Limpa_background(path, prefixo):
-    # Carrega arquivo em base64
-    image = path + "/dataset/ruido_base64/" + prefixo + ".txt"
+    # Carrega imagem com ruido em base64
+    dir_temp = path + 'dataset/temp/'
+    image = path + "dataset/ruido_base64/" + prefixo + ".txt" # le imagem a ser limpa
     read_file = open(image, 'rb')
-    data = read_file.read()
+    data = read_file.read()   # data e a imagem com ruido em base64
 
-    # decodifica arquivo para imagem
+    # decodifica arquivo para imagem png
     decode_b64 = pybase64.b64decode(data)
 
-    
-    # grava imagem
-    path_saida = path  + 'temp.png'
-    out_file = open(path_saida, 'wb')
+    # grava imagem decodificada no diretorio temp
+    path_temp = dir_temp  + prefixo + '.png'
+    out_file = open(path_temp, 'wb')
     out_file.write(decode_b64)
-    image=Image.open(path_saida)
+
+    image = Image.open(path_temp)
     image.show()
     
-    ## carrega imagem
-    inp = load_image(path_saida)
+    # carrega imagem salva como png
+    inp = load_image(path_temp)
 
     # limpa imagem
-    out = denoise_image(inp)
+    out = denoise_image(dir_temp, prefixo, inp)
 
-    # salva imagem decodificada
-    arq_limpa_decode = path + '/dataset/limpa_decode/' + prefixo  + '.png'
+    # salva imagem limpa decodificada
+    arq_limpa_decode = path + 'dataset/limpa_decode/' + prefixo  + '.png'
     save(arq_limpa_decode, out)
     #out_file = open(arq_limpa_decode, 'wb')
     #out_file.write(out)
-    #out_file.close
 
     # codifica imagem
     read_file = open(arq_limpa_decode, 'rb')
     data_limpa = read_file.read()
     encode_b64 = pybase64.b64encode(data_limpa)
 
-    # grava imagem em base64 e tambem a decodificada
-    arq_limpa_base64 = path + '/dataset/limpa_base64/' + prefixo  + '.txt'
-    #save(arq_limpa_base64, encode_b64)
+    # grava imagem em base64
+    arq_limpa_base64 = path + 'dataset/limpa_base64/' + prefixo  + '.txt'
     out_file = open(arq_limpa_base64, 'wb')
     out_file.write(encode_b64)
-    out_file.close
 
     # adiciona no banco
-    arquivo = Arquivos(nome= prefixo , caminho= path, img_origem =  data, img_limpa = encode_b64)
+    arquivo = Arquivos(nome= prefixo , caminho= arq_limpa_base64, img_origem =  data, img_limpa = encode_b64)
     return arquivo

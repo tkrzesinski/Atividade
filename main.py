@@ -14,7 +14,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__)) + '/'
 app = Flask(__name__, static_folder="uploads")
 
 api = Api(app)
-UPLOAD_FOLDER = dir_path + '/dataset/ruido_base64/'
+UPLOAD_FOLDER = dir_path + 'dataset/ruido_base64/'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['UPLOAD_EXTENSIONS'] = ['.png','.txt']
