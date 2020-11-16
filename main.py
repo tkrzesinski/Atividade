@@ -2,19 +2,19 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from banco import Arquivos
 from background import Limpa_background
-from io import BytesIO
-from PIL import Image
+from io import BytesIO   #  trabalha com buffer
+from PIL import Image    #   recursos para edicao de imagens
 import pybase64
 
 import werkzeug, os
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename  # valida o nome do arquivo para nao executar um bash
 
 dir_path = os.path.dirname(os.path.realpath(__file__)) + '/'
 
 app = Flask(__name__)
 
 api = Api(app)
-UPLOAD_FOLDER = dir_path + 'dataset/ruido_base64/'
+UPLOAD_FOLDER = dir_path + 'dataset/ruido_base64/'  # nao esta sendo usado pois grava no temp
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['UPLOAD_EXTENSIONS'] = ['.png','.txt']
@@ -42,7 +42,9 @@ class UploadFile(Resource):
         if file.filename == '':
             response = {'mensagem': 'Nao ha arquivo para upload'}
             return response
-        if file and allowed_file(file.filename):
+        if file and allowed_file(file.filename):  # file_ext = os.path.splitext(filename)[1]
+                                                  # if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
+                                                  #                 file_ext != validate_image(uploaded_file.stream)
             filename = secure_filename(file.filename)
             prefixo = os.path.splitext(filename)[0]
 
