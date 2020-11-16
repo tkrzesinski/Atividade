@@ -33,6 +33,13 @@ Para desenvolver esta solução foram executados os seguintes passos:
     3.3 Ha bibliografia que pretende estudar os efeitos da combinação de técnicas de processamento de imagens e redes neurais. Técnicas de processamento de imagem         como limiarização, filtragem, detecção de bordas, operações morfológicas, etc. são aplicadas a imagens de pré-processamento para render maior precisão             de modelos de rede neural.
     
     3.4 Então, por entender que, para esta solução seria melhor um metodo com necessidade de pouco recurso e que melhor executasse a função dentro de suas                 limitações, foi selecionado o metodo de Background. Subtraimos o fundo da imagem e retiramos o primeiro plano .
+    3.5 Explicaçao do metodo:
+        a.  Imagem a ser utilizada foi a decodificada (.png)
+        b.  transformar a imagem em array e normalizar os pixels entre 0 e 1 ( / 255 )
+        c.  utiliza o metodo scipy.signal.medfilt2d(input, kernel_size=11) - aplica filtro da mediana a uma matriz bidimensional, com kernel = 11, desta forma, 
+            borrando a imagem e reduzindo as caracteristicas da fonte , para obter uma imagem de fundo.
+        d.  mask = inp < bg - 0.1 - Após a saída dos valores de mask (é a imagem em primeiro plano), inp ( array normalizada)  e bg (imagem de fundo), pode-se                 descobrir que no intervalo de 0-1, quanto mais próximo de 0, mais escura é a cor. Portanto, o valor do vetor em bg é maior do que o valor em inp. A               parte branca em inp está próxima de 1 e a parte preta está próxima de 0.  Portanto, a instrução mask = inp <bg -0.1 resultará em uma matriz binária               com um valor de apenas 1 ou 0
+        e.  O último np.where (mask, inp, 1.0) retorna 1 se a máscara for a parte do fundo (False) .Se for a parte da fonte (True), insira o valor da parte da                 fonte correspondente em inp. Invertendo as cores de mask
     
 
 A estrutura do diretorio:
