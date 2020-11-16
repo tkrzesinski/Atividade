@@ -7,7 +7,7 @@ from banco import Arquivos
 def load_image(path):
     return np.asarray(Image.open(path)) /255.0  # transforma a imagem .png em array e dimensiona os valores de pixel
                                                 # na faixa de 0-1
-
+                                                # etapa de pre-processamento comum
 def save(path, img):
     tmp = np.asarray(img*255.0, dtype=np.uint8)
     Image.fromarray(tmp).save(path)
@@ -33,7 +33,8 @@ def Limpa_background(path, prefixo):
     dir_temp = path + 'dataset/temp/'      # diretorio temporario para trabalhar com as imagens
     image = path + "dataset/ruido_base64/" + prefixo + ".txt" # le imagem em base64 a ser limpa,
     read_file = open(image, 'rb')
-    data = read_file.read()   # data e a variavel com a imagem com ruido em base64
+    data = read_file.read()  # data e a variavel com a imagem com ruido em base64
+    read_file.close()   # nao foi colocado no git
 
     # decodifica arquivo para imagem png - transforma txt para png
     decode_b64 = pybase64.b64decode(data)
@@ -42,6 +43,7 @@ def Limpa_background(path, prefixo):
     path_temp = dir_temp  + prefixo + '.png'
     out_file = open(path_temp, 'wb')
     out_file.write(decode_b64)
+    out_file.close() # nao esta no git
 
     # mostra a imagen a ser limpa
     #image = Image.open(path_temp)
